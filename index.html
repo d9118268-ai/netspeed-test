@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSpeed - Network Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ NetSpeed</h1>
+            <p>Test your internet connection</p>
+        </header>
+
+        <div class="gauge-container">
+            <div class="gauge">
+                <div class="gauge-bg"></div>
+                <div class="gauge-fill" id="gaugeFill"></div>
+                <div class="gauge-center">
+                    <span class="speed-value" id="speedValue">0.0</span>
+                    <span class="speed-unit" id="speedUnit">Mbps</span>
+                    <span class="test-label" id="testLabel">Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <div class="result-card">
+                <span class="result-icon">📥</span>
+                <span class="result-label">Download</span>
+                <span class="result-value" id="downloadResult">--</span>
+                <span class="result-unit">Mbps</span>
+            </div>
+            <div class="result-card">
+                <span class="result-icon">📤</span>
+                <span class="result-label">Upload</span>
+                <span class="result-value" id="uploadResult">--</span>
+                <span class="result-unit">Mbps</span>
+            </div>
+            <div class="result-card">
+                <span class="result-icon">⏱️</span>
+                <span class="result-label">Ping</span>
+                <span class="result-value" id="pingResult">--</span>
+                <span class="result-unit">ms</span>
+            </div>
+            <div class="result-card">
+                <span class="result-icon">📊</span>
+                <span class="result-label">Jitter</span>
+                <span class="result-value" id="jitterResult">--</span>
+                <span class="result-unit">ms</span>
+            </div>
+        </div>
+
+        <button class="start-btn" id="startBtn" onclick="startTest()">
+            <span class="btn-text">Start Test</span>
+            <div class="btn-loader" id="btnLoader"></div>
+        </button>
+
+        <div class="server-info">
+            <span id="serverLocation">🌍 Detecting location...</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
