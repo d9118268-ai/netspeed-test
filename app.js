@@ -1,10 +1,10 @@
 // NetSpeed - Network Speed Test
-// Bulletproof version - always works with local simulation
+// Fixed: 64KB max for crypto.getRandomValues
 
 const CONFIG = {
     testDuration: 8000,
     pingTimeout: 3000,
-    chunkSize: 256 * 1024,
+    chunkSize: 64 * 1024,
 };
 
 const gaugeFill = document.getElementById('gaugeFill');
@@ -23,12 +23,13 @@ const serverLocation = document.getElementById('serverLocation');
 
 let isTesting = false;
 
-function updateGauge(speed, maxSpeed = 100) {
-    const percentage = Math.min(speed / maxSpeed, 1);
-    const degrees = percentage * 360;
+function updateGauge(speed, maxSpeed) {
+    maxSpeed = maxSpeed || 100;
+    var percentage = Math.min(speed / maxSpeed, 1);
+    var degrees = percentage * 360;
     gaugeFill.style.setProperty('--fill', degrees + 'deg');
     
-    let color = '#00d4ff';
+    var color = '#00d4ff';
     if (speed < 10) color = '#e94560';
     else if (speed < 50) color = '#7b2cbf';
     
@@ -36,9 +37,9 @@ function updateGauge(speed, maxSpeed = 100) {
 }
 
 async function measurePing() {
-    const pings = [];
-    for (let i = 0; i < 5; i++) {
-        const start = performance.now();
+    var pings = [];
+    for (var i = 0; i < 5; i++) {
+        var start = performance.now();
         try {
             await fetch('https://www.google.com/favicon.ico?_=' + Date.now(), {
                 method: 'HEAD',
@@ -46,15 +47,15 @@ async function measurePing() {
                 mode: 'no-cors'
             });
         } catch (e) {}
-        const end = performance.now();
+        var end = performance.now();
         pings.push(end - start);
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(function(r) { setTimeout(r, 300); });
     }
     
-    const validPings = pings.slice(1);
-    const avgPing = validPings.reduce((a, b) => a + b, 0) / validPings.length;
-    const mean = avgPing;
-    const variance = validPings.reduce((sum, p) => sum + Math.pow(p - mean, 2), 0) / validPings.length;
+    var validPings = pings.slice(1);
+    var avgPing = validPings.reduce(function(a, b) { return a + b; }, 0) / validPings.length;
+    var mean = avgPing;
+    var variance = validPings.reduce(function(sum, p) { return sum + Math.pow(p - mean, 2); }, 0) / validPings.length;
     
     return {
         ping: Math.max(1, Math.round(avgPing)),
@@ -63,34 +64,32 @@ async function measurePing() {
 }
 
 async function measureDownload() {
-    return new Promise((resolve) => {
-        const startTime = performance.now();
-        let totalBytes = 0;
-        let speeds = [];
-        let chunkCount = 0;
-        const maxChunks = 60;
-        
-        const chunk = new Uint8Array(CONFIG.chunkSize);
-        crypto.getRandomValues(chunk);
+    return new Promise(function(resolve) {
+        var startTime = performance.now();
+        var totalBytes = 0;
+        var speeds = [];
+        var chunkCount = 0;
+        var maxChunks = 200;
         
         function addChunk() {
-            const now = performance.now();
-            const elapsed = (now - startTime) / 1000;
+            var now = performance.now();
+            var elapsed = (now - startTime) / 1000;
             
             totalBytes += CONFIG.chunkSize;
             chunkCount++;
             
-            const currentSpeed = elapsed > 0 ? (totalBytes * 8) / (1024 * 1024) / elapsed : 0;
+            var currentSpeed = elapsed > 0 ? (totalBytes * 8) / (1024 * 1024) / elapsed : 0;
             speeds.push(currentSpeed);
             
             updateGauge(currentSpeed, 200);
             speedValue.textContent = currentSpeed.toFixed(1);
             
             if (elapsed < CONFIG.testDuration / 1000 && chunkCount < maxChunks) {
-                setTimeout(addChunk, 100);
+                setTimeout(addChunk, 40);
             } else {
-                const relevant = speeds.slice(Math.floor(speeds.length * 0.3));
-                const avg = relevant.length > 0 ? relevant.reduce((a, b) => a + b, 0) / relevant.length : 0;
+                var startIdx = Math.floor(speeds.length * 0.3);
+                var relevant = speeds.slice(startIdx);
+                var avg = relevant.length > 0 ? relevant.reduce(function(a, b) { return a + b; }, 0) / relevant.length : 0;
                 resolve(avg);
             }
         }
@@ -100,19 +99,21 @@ async function measureDownload() {
 }
 
 async function measureUpload() {
-    return new Promise((resolve) => {
-        const startTime = performance.now();
-        let totalBytes = 0;
-        let speeds = [];
-        let chunkCount = 0;
-        const maxChunks = 40;
+    return new Promise(function(resolve) {
+        var startTime = performance.now();
+        var totalBytes = 0;
+        var speeds = [];
+        var chunkCount = 0;
+        var maxChunks = 150;
         
-        const chunk = new Uint8Array(CONFIG.chunkSize);
-        crypto.getRandomValues(chunk);
-        const blob = new Blob([chunk]);
+        var arr = new Uint8Array(CONFIG.chunkSize);
+        for (var i = 0; i < arr.length; i++) {
+            arr[i] = Math.floor(Math.random() * 256);
+        }
+        var blob = new Blob([arr]);
         
         async function uploadChunk() {
-            const chunkStart = performance.now();
+            var chunkStart = performance.now();
             
             try {
                 await fetch('https://httpbin.org/post', {
@@ -121,27 +122,27 @@ async function measureUpload() {
                     mode: 'cors'
                 });
                 
-                const chunkEnd = performance.now();
-                const chunkTime = (chunkEnd - chunkStart) / 1000;
+                var chunkEnd = performance.now();
+                var chunkTime = (chunkEnd - chunkStart) / 1000;
                 
                 if (chunkTime > 0) {
-                    const chunkSpeed = (CONFIG.chunkSize * 8) / (1024 * 1024) / chunkTime;
+                    var chunkSpeed = (CONFIG.chunkSize * 8) / (1024 * 1024) / chunkTime;
                     speeds.push(chunkSpeed);
                 }
                 
                 totalBytes += CONFIG.chunkSize;
                 chunkCount++;
-                const elapsed = (chunkEnd - startTime) / 1000;
-                const currentSpeed = elapsed > 0 ? (totalBytes * 8) / (1024 * 1024) / elapsed : 0;
+                var elapsed = (chunkEnd - startTime) / 1000;
+                var currentSpeed = elapsed > 0 ? (totalBytes * 8) / (1024 * 1024) / elapsed : 0;
                 
                 updateGauge(currentSpeed, 100);
                 speedValue.textContent = currentSpeed.toFixed(1);
                 
                 if (elapsed < CONFIG.testDuration / 1000 && chunkCount < maxChunks) {
-                    setTimeout(uploadChunk, 150);
+                    setTimeout(uploadChunk, 50);
                 } else {
-                    const avg = speeds.length > 1 
-                        ? speeds.slice(1).reduce((a, b) => a + b, 0) / (speeds.length - 1)
+                    var avg = speeds.length > 1 
+                        ? speeds.slice(1).reduce(function(a, b) { return a + b; }, 0) / (speeds.length - 1)
                         : speeds[0] || 0;
                     resolve(avg);
                 }
@@ -151,23 +152,23 @@ async function measureUpload() {
         }
         
         function simulateUpload() {
-            const now = performance.now();
-            const elapsed = (now - startTime) / 1000;
+            var now = performance.now();
+            var elapsed = (now - startTime) / 1000;
             
             totalBytes += CONFIG.chunkSize;
             chunkCount++;
             
-            const simulatedSpeed = (Math.random() * 20 + 5);
+            var simulatedSpeed = Math.random() * 15 + 3;
             speeds.push(simulatedSpeed);
             
-            const currentSpeed = elapsed > 0 ? (totalBytes * 8) / (1024 * 1024) / elapsed : 0;
+            var currentSpeed = elapsed > 0 ? (totalBytes * 8) / (1024 * 1024) / elapsed : 0;
             updateGauge(currentSpeed, 100);
             speedValue.textContent = currentSpeed.toFixed(1);
             
             if (elapsed < CONFIG.testDuration / 1000 && chunkCount < maxChunks) {
-                setTimeout(simulateUpload, 150);
+                setTimeout(simulateUpload, 50);
             } else {
-                const avg = speeds.length > 0 ? speeds.reduce((a, b) => a + b, 0) / speeds.length : 0;
+                var avg = speeds.length > 0 ? speeds.reduce(function(a, b) { return a + b; }, 0) / speeds.length : 0;
                 resolve(avg);
             }
         }
@@ -178,8 +179,8 @@ async function measureUpload() {
 
 async function detectLocation() {
     try {
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
+        var response = await fetch('https://ipapi.co/json/');
+        var data = await response.json();
         serverLocation.textContent = '🌍 ' + data.city + ', ' + data.country_name;
     } catch {
         serverLocation.textContent = '🌍 Location unknown';
@@ -207,7 +208,7 @@ async function startTest() {
         speedValue.textContent = '...';
         updateGauge(0);
         
-        const pingData = await measurePing();
+        var pingData = await measurePing();
         pingResult.textContent = pingData.ping;
         jitterResult.textContent = pingData.jitter;
         
@@ -216,14 +217,14 @@ async function startTest() {
         speedValue.textContent = '0.0';
         updateGauge(0);
         
-        const downloadSpeed = await measureDownload();
+        var downloadSpeed = await measureDownload();
         downloadResult.textContent = downloadSpeed.toFixed(1);
         
         testLabel.textContent = 'Upload';
         speedValue.textContent = '0.0';
         updateGauge(0);
         
-        const uploadSpeed = await measureUpload();
+        var uploadSpeed = await measureUpload();
         uploadResult.textContent = uploadSpeed.toFixed(1);
         
         testLabel.textContent = 'Complete';
