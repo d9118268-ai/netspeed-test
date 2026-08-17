@@ -2,23 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Test your internet speed online for free. Check your download speed, upload speed, ping, and network performance instantly.">
-    <title>Free Internet Speed Test | Check WiFi Speed Online</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetSpeed - Network Speed Test</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>⚡Free Internet Speed Test</h1>
-            <p>Check your WiFi and internet connection speed. Test download speed, upload speed, ping, and network performance online.</p>
+            <h1>⚡ NetSpeed</h1>
+            <p>Test your internet connection</p>
         </header>
 
-<button id="speedCircle" class="speed-circle" onclick="startSpeedTest()">
-    <div class="circle-content">
-        <div id="speedValue" class="speed-value">TEST</div>
-        <div id="speedUnit" class="speed-unit">CLICK TO START</div>
-    </div>
-</button>
+        <div class="gauge-container">
+            <div class="gauge">
+                <div class="gauge-bg"></div>
                 <div class="gauge-fill" id="gaugeFill"></div>
                 <div class="gauge-center">
                     <span class="speed-value" id="speedValue">0.0</span>
