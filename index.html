@@ -2,69 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <meta name="description" content="Test your internet speed online for free. Check your download speed, upload speed, ping, and network performance instantly.">
-    <title>Free Internet Speed Test | Check WiFi Speed Online</title>
+
+    <meta name="keywords" content="internet speed test, wifi speed test, download speed test, upload speed test, ping test, network speed test">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NetSpeed | Free Internet Speed Test</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <div class="container">
+
         <header>
-            <h1>⚡Free Internet Speed Test</h1>
-            <p>Check your WiFi and internet connection speed. Test download speed, upload speed, ping, and network performance online.</p>
+            <h1>⚡ NetSpeed</h1>
+            <p>Test your internet connection</p>
         </header>
 
-<button id="speedCircle" class="speed-circle" onclick="startSpeedTest()">
-    <div class="circle-content">
-        <div id="speedValue" class="speed-value">TEST</div>
-        <div id="speedUnit" class="speed-unit">CLICK TO START</div>
-    </div>
-</button>
+
+        <!-- THE BIG CIRCLE IS NOW THE BUTTON -->
+        <button class="gauge-button" id="startBtn" onclick="startTest()">
+
+            <div class="gauge">
+
+                <div class="gauge-bg"></div>
+
                 <div class="gauge-fill" id="gaugeFill"></div>
+
                 <div class="gauge-center">
-                    <span class="speed-value" id="speedValue">0.0</span>
-                    <span class="speed-unit" id="speedUnit">Mbps</span>
-                    <span class="test-label" id="testLabel">Ready</span>
+
+                    <span class="speed-value" id="speedValue">TEST</span>
+
+                    <span class="speed-unit" id="speedUnit">
+                        CLICK TO START
+                    </span>
+
+                    <span class="test-label" id="testLabel">
+                        READY
+                    </span>
+
                 </div>
+
             </div>
-        </div>
+
+        </button>
+
 
         <div class="results" id="results">
+
             <div class="result-card">
                 <span class="result-icon">📥</span>
                 <span class="result-label">Download</span>
                 <span class="result-value" id="downloadResult">--</span>
                 <span class="result-unit">Mbps</span>
             </div>
+
             <div class="result-card">
                 <span class="result-icon">📤</span>
                 <span class="result-label">Upload</span>
                 <span class="result-value" id="uploadResult">--</span>
                 <span class="result-unit">Mbps</span>
             </div>
+
             <div class="result-card">
                 <span class="result-icon">⏱️</span>
                 <span class="result-label">Ping</span>
                 <span class="result-value" id="pingResult">--</span>
                 <span class="result-unit">ms</span>
             </div>
+
             <div class="result-card">
                 <span class="result-icon">📊</span>
                 <span class="result-label">Jitter</span>
                 <span class="result-value" id="jitterResult">--</span>
                 <span class="result-unit">ms</span>
             </div>
+
         </div>
 
-        <button class="start-btn" id="startBtn" onclick="startTest()">
-            <span class="btn-text">Start Test</span>
-            <div class="btn-loader" id="btnLoader"></div>
-        </button>
 
         <div class="server-info">
             <span id="serverLocation">🌍 Detecting location...</span>
         </div>
+
     </div>
 
+
     <script src="app.js"></script>
+
 </body>
 </html>
