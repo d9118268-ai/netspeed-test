@@ -242,6 +242,12 @@ async function startTest() {
         btnText.textContent = 'Test Again';
         btnLoader.classList.remove('active');
     }
+    function startSpeedTest() {
+    document.getElementById("speedValue").textContent = "TESTING";
+    document.getElementById("speedUnit").textContent = "PLEASE WAIT";
+
+    // Your existing speed test code goes here
+}
 }
 
 detectLocation();

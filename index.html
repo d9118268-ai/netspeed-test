@@ -13,9 +13,12 @@
             <p>Check your WiFi and internet connection speed. Test download speed, upload speed, ping, and network performance online.</p>
         </header>
 
-        <div class="gauge-container">
-            <div class="gauge">
-                <div class="gauge-bg"></div>
+<button id="speedCircle" class="speed-circle" onclick="startSpeedTest()">
+    <div class="circle-content">
+        <div id="speedValue" class="speed-value">TEST</div>
+        <div id="speedUnit" class="speed-unit">CLICK TO START</div>
+    </div>
+</button>
                 <div class="gauge-fill" id="gaugeFill"></div>
                 <div class="gauge-center">
                     <span class="speed-value" id="speedValue">0.0</span>
