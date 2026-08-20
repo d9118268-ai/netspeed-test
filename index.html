@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,6 +64,16 @@
             <span id="serverLocation">🌍 Detecting location...</span>
         </div>
     </div>
+<footer>
+  <p>
+    Developed By: <strong>David Ayomide</strong> &copy;
+    <span id="year"></span>
+  </p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 
     <script src="app.js"></script>
 </body>
