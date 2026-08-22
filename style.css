@@ -224,3 +224,7 @@ header p {
         grid-template-columns: 1fr;
     }
 }
+footer a {
+  color: #4dabf7;
+  text-decoration: underline;
+}
